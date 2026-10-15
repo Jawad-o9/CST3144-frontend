@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,35 +8,89 @@
 
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
+
 <body>
-    
+
+
+    <div id="app">
+        <div v-if="showProduct">
+            <h2 v-text="product.subject"></h2>
+            <h3>location: {{product.location}}</h3>
+            <p>The price for this course is {{product.price}} </p>
+
+            <img v-bind:src="product.image" :alt="product.alt" width=200>
+            <p>Spaces left: {{ product.spaces - cartItemCount }}</p>
+
+            <button v-on:click="addItem" :disabled="!canAddToCart">
+                Add to cart
+            </button>
+
+            <button @click="showCheckout" :disabled="cartItemCount === 0">
+                Checkout {{cartItemCount}}
+            </button>
+
+        </div>
+
+        <div v-else>
+            <button @click="showCheckout">
+                Back to products
+            </button>
+            <p>Items in Cart {{cartItemCount}}</p>
+        </div>
+
+    </div>
+
+
+
     <script type="module">
-        const {createApp} = Vue
-        const myApp = createApp({
+        const { createApp } = Vue
+        const myClub = createApp({
             data() {
                 return {
-                    subject: "History",
-                    location: "Cambridge",
-                    price: "5000$",
-                    image: "img/history.jpg",
-                    alt: "a spartan teaching history"
+                    sitename: "Jawad's after School Club",
+                    product:
+                    {
+                        id: 1001,
+                        subject: "Coding Bootcamp",
+                        location: "Hendon",
+                        category: "Academic",
+                        price: 150,
+                        spaces: 5,
+                        image: "img/history.jpg",
+                        alt: "Coding bootcamp class at hendon campus",
+                    },
+                    showProduct: true,
+                    cart: []
+                }
+            },
+            computed: {
+
+                cartItemCount: function () {
+                    return this.cart.length;
+                },
+                canAddToCart: function () {
+                    return this.product.spaces > this.cartItemCount;
+                }
+            },
+
+            methods: {
+                addItem() {
+                    this.cart.push(this.product.id);
+                },
+                showCheckout() {
+                    this.showProduct = this.showProduct ? false : true;
                 }
             }
-        })
+        }
 
-        myApp.mount('#app')
-    
+        )
+
+        myClub.mount('#app')
+
     </script>
 
-    
-<div id="app">    
-    <h1>subject: {{subject}}</h1>
-    <h3>location: {{location}}</h3>
-    <p>The price for this course is {{price}} </p>
-
-    <img v-bind:src="image" v-bind:alt="alt" width=200></img>
-</div>
 
 
 </body>
+
 </html>
