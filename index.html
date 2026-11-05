@@ -6,90 +6,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
 
+    <!-- Icons using fontawesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 
 <body>
 
-
     <div id="app">
-        <div v-if="showProduct">
-            <h2 v-text="product.subject"></h2>
-            <h3>location: {{product.location}}</h3>
-            <p>The price for this course is {{product.price}} </p>
 
-            <img v-bind:src="product.image" :alt="product.alt" width=200>
-            <p>Spaces left: {{ product.spaces - cartItemCount }}</p>
-
-            <button v-on:click="addItem" :disabled="!canAddToCart">
-                Add to cart
-            </button>
-
+        <!-- sitename and Checkout button -->
+        <header>
+            <h1>{{ sitename }}</h1>
             <button @click="showCheckout" :disabled="cartItemCount === 0">
-                Checkout {{cartItemCount}}
+                <i class="fas fa-shopping-cart"></i> Checkout ({{ cartItemCount }})
             </button>
+        </header>
 
+        <!-- Product List View (shown when showProduct is true) -->
+        <div v-if="showProduct">
+            <div v-for="product in products" :key="product.id">
+                <figure>
+                    <img v-if="product.image" :src="product.image" :alt="product.title" width="200">
+                </figure>
+                <i :class="product.icon"></i>
+                <h2 v-text="product.title"></h2>
+                <p v-text="product.description"></p>
+                <p>Location: {{ product.location }}</p>
+                <p>Price: £{{ product.price }}</p>
+                <p>Spaces left: {{ product.availableInventory }}</p>
+
+                <!-- Passing the current product to the method -->
+                <button @click="addToCart(product)" :disabled="!canAddToCart(product)">
+                    Add to cart
+                </button>
+            </div>
         </div>
 
+        <!-- Checkout View (shown when showProduct is false) -->
         <div v-else>
+            <h2>Checkout</h2>
             <button @click="showCheckout">
                 Back to products
             </button>
-            <p>Items in Cart {{cartItemCount}}</p>
         </div>
 
     </div>
 
-
-
-    <script type="module">
-        const { createApp } = Vue
-        const myClub = createApp({
-            data() {
-                return {
-                    sitename: "Jawad's after School Club",
-                    product:
-                    {
-                        id: 1001,
-                        subject: "Coding Bootcamp",
-                        location: "Hendon",
-                        category: "Academic",
-                        price: 150,
-                        spaces: 5,
-                        image: "img/history.jpg",
-                        alt: "Coding bootcamp class at hendon campus",
-                    },
-                    showProduct: true,
-                    cart: []
-                }
-            },
-            computed: {
-
-                cartItemCount: function () {
-                    return this.cart.length;
-                },
-                canAddToCart: function () {
-                    return this.product.spaces > this.cartItemCount;
-                }
-            },
-
-            methods: {
-                addItem() {
-                    this.cart.push(this.product.id);
-                },
-                showCheckout() {
-                    this.showProduct = this.showProduct ? false : true;
-                }
-            }
-        }
-
-        )
-
-        myClub.mount('#app')
-
-    </script>
-
-
+    <script src="products.js"></script>
+    <script src="app.js"></script>
 
 </body>
 
