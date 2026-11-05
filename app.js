@@ -7,6 +7,13 @@ const myClub = createApp({
             products: productsArray,
             showProduct: true,
             cart: [],
+            orderDetails: {
+                firstName: '',
+                lastName: '',
+                phone: '',
+                email: '',
+                address: '',
+            }
         };
     },
     computed: {

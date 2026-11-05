@@ -50,6 +50,19 @@
             <button @click="showCheckout">
                 Back to products
             </button>
+            <div v-if="cartItemCount > 0" class="checkoutForm">
+                <p>Items in Cart: {{ cartItemCount }}</p>
+                <p>First Name: <input v-model="orderDetails.firstName"></p>
+                <p>Last Name: <input v-model="orderDetails.lastName"></p>
+                <p>Phone: <input v-model="orderDetails.phone"></p>
+                <p>Email: <input v-model="orderDetails.email"></p>
+                <p>Address: <input v-model="orderDetails.address"></p>
+                <h2>Purchase Summary </h2>
+                <p>Full Name: {{ fullName }}</p>
+                <p>Phone Number: {{ orderDetails.phone }}</p>
+                <p>Email Address: {{ orderDetails.email }}</p>
+                <p>Address: {{ orderDetails.address }}</p>
+            </div>
         </div>
 
     </div>
