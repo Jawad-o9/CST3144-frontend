@@ -130,3 +130,5 @@ let productsArray = [
         icon: "fas fa-bat-cricket"
     }
 ];
+
+response.json(productsArray);

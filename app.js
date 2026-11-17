@@ -4,9 +4,11 @@ const myClub = createApp({
     data() {
         return {
             sitename: "Jawad's after School Club",
-            products: productsArray,
+            products: [],  // fetchData() fills this from the server now no need to use the product.js ig
             showProduct: true,
             cart: [],
+            sortBy: "title",
+            sortOrder: "asc",
             orderDetails: {
                 firstName: '',
                 lastName: '',
@@ -15,6 +17,9 @@ const myClub = createApp({
                 address: '',
             }
         };
+    },
+    created() {
+        this.fetchData();
     },
     computed: {
         cartItemCount() {
@@ -25,12 +30,38 @@ const myClub = createApp({
         },
         checkoutForm() {
             return this.OrderDetails;
+        },
+        sortedProducts: function () {
+
+            let productsArray = this.products.slice(0);
+
+            let sortBy = this.sortBy;
+            let sortOrder = this.sortOrder;
+
+            function compare(a, b) {
+                if (a[sortBy] > b[sortBy]) {
+                    return sortOrder === "asc" ? 1 : -1;
+                }
+
+                if (a[sortBy] < b[sortBy]) {
+                    return sortOrder === "asc" ? -1 : 1;
+                }
+
+                return 0; // if equal
+            }
+
+            return productsArray.sort(compare); // returns sorted copy
         }
     },
     methods: {
+        async fetchData() {
+            const url = "http://localhost:3000/";  // match the port in server.js also 
+            let response = await (fetch(url));
+            this.products = await response.json();
+        },
         addToCart(product) {
             if (this.canAddToCart(product)) {
-                this.cart.push(product.id);  // push just the id number, not the whole object
+                this.cart.push(product.id);  // push just the id number, not the whole object(made that mistake once lol)
                 product.availableInventory--;
             } else {
                 alert("Out of stock");

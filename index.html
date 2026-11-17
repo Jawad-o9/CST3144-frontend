@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
 
-    <!-- Icons using fontawesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
@@ -24,9 +23,28 @@
             </button>
         </header>
 
-        <!-- Product List View (shown when showProduct is true) -->
+        <!-- Product List  View  shown when showProduct is true -->
         <div v-if="showProduct">
-            <div v-for="product in products" :key="product.id">
+
+            <div>
+                <label> Sort By:
+                    <select v-model="sortBy">
+                        <option value="title">Title</option>
+                        <option value="price">Price</option>
+                        <option value="location">Location</option>
+                        <option value="availableInventory">Spaces</option>
+                    </select>
+                </label>
+
+                <label>
+                    <select v-model="sortOrder">
+                        <option value="asc">Ascending</option>
+                        <option value="desc">Descending</option>
+                    </select>
+                </label>
+            </div>
+
+            <div v-for="product in sortedProducts" :key="product.id">
                 <figure>
                     <img v-if="product.image" :src="product.image" :alt="product.title" width="200">
                 </figure>
