@@ -51,6 +51,14 @@ const myClub = createApp({
             }
 
             return productsArray.sort(compare); // returns sorted copy
+        },
+        canSubmitOrder() {
+            let nameRegex = /^[A-Za-z]+$/;
+            let phoneRegex = /^[0-9]+$/;
+            return this.cart.length > 0 &&
+                   nameRegex.test(this.orderDetails.firstName) &&
+                   nameRegex.test(this.orderDetails.lastName) &&
+                   phoneRegex.test(this.orderDetails.phone);
         }
     },
     methods: {
@@ -75,6 +83,32 @@ const myClub = createApp({
         },
         canAddToCart(product) {
             return product.availableInventory > 0;
+        },
+        cartCount(id) {
+            let count = 0;
+            for (let i = 0; i < this.cart.length; i++) {
+                if (this.cart[i] === id) {
+                    count++;
+                }
+            }
+            return count;
+        },
+        removeFromCart(product) {
+            const index = this.cart.indexOf(product.id);
+            if (index !== -1) {
+                this.cart.splice(index, 1);
+                product.availableInventory++;
+            }
+        },
+        submitCheckout() {
+            alert("Order submitted successfully!");
+            this.cart = [];
+            this.orderDetails.firstName = '';
+            this.orderDetails.lastName = '';
+            this.orderDetails.phone = '';
+            this.orderDetails.email = '';
+            this.orderDetails.address = '';
+            this.showProduct = true;
         }
     }
 });

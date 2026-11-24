@@ -64,22 +64,48 @@
 
         <!-- Checkout View (shown when showProduct is false) -->
         <div v-else>
-            <h2>Checkout</h2>
+            <h2>Shopping Cart</h2>
             <button @click="showCheckout">
                 Back to products
             </button>
-            <div v-if="cartItemCount > 0" class="checkoutForm">
-                <p>Items in Cart: {{ cartItemCount }}</p>
-                <p>First Name: <input v-model="orderDetails.firstName"></p>
-                <p>Last Name: <input v-model="orderDetails.lastName"></p>
-                <p>Phone: <input v-model="orderDetails.phone"></p>
-                <p>Email: <input v-model="orderDetails.email"></p>
-                <p>Address: <input v-model="orderDetails.address"></p>
-                <h2>Purchase Summary </h2>
-                <p>Full Name: {{ fullName }}</p>
-                <p>Phone Number: {{ orderDetails.phone }}</p>
-                <p>Email Address: {{ orderDetails.email }}</p>
-                <p>Address: {{ orderDetails.address }}</p>
+
+            <!-- Cart Items Summary & Remove button -->
+            <div v-if="cartItemCount > 0">
+                <h3>Items in Cart</h3>
+                <div v-for="product in products" :key="product.id">
+                    <div v-if="cartCount(product.id) > 0">
+                        <p>
+                            <i :class="product.icon"></i>
+                            <strong>{{ product.title }}</strong> -
+                            Spaces: {{ cartCount(product.id) }} -
+                            Price: £{{ product.price * cartCount(product.id) }}
+                            <button @click="removeFromCart(product)">Remove</button>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="checkoutForm">
+                    <h3>Checkout Details</h3>
+                    <p>First Name: <input v-model.trim="orderDetails.firstName"></p>
+                    <p>Last Name: <input v-model.trim="orderDetails.lastName"></p>
+                    <p>Phone: <input v-model.trim="orderDetails.phone"></p>
+                    <p>Email: <input v-model.trim="orderDetails.email"></p>
+                    <p>Address: <input v-model.trim="orderDetails.address"></p>
+
+                    <h2>Purchase Summary </h2>
+                    <p>Full Name: {{ fullName }}</p>
+                    <p>Phone Number: {{ orderDetails.phone }}</p>
+                    <p>Email Address: {{ orderDetails.email }}</p>
+                    <p>Address: {{ orderDetails.address }}</p>
+                    <p>Total Items: {{ cartItemCount }}</p>
+
+                    <button @click="submitCheckout" :disabled="!canSubmitOrder">
+                        Checkout
+                    </button>
+                </div>
+            </div>
+            <div v-else>
+                <p>Your cart is empty.</p>
             </div>
         </div>
 
