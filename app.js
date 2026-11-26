@@ -1,5 +1,7 @@
 const { createApp } = Vue;
 
+const BASE_URL = "http://localhost:3000";
+
 const myClub = createApp({
     data() {
         return {
@@ -9,6 +11,7 @@ const myClub = createApp({
             cart: [],
             sortBy: "title",
             sortOrder: "asc",
+            baseUrl: BASE_URL,
             orderDetails: {
                 firstName: '',
                 lastName: '',
@@ -52,18 +55,18 @@ const myClub = createApp({
 
             return productsArray.sort(compare); // returns sorted copy
         },
-        canSubmitOrder() {
+        canSubmitOrder() { // validation to allow submission only if cart is not empty and details are valid
             let nameRegex = /^[A-Za-z]+$/;
             let phoneRegex = /^[0-9]+$/;
             return this.cart.length > 0 &&
-                   nameRegex.test(this.orderDetails.firstName) &&
-                   nameRegex.test(this.orderDetails.lastName) &&
-                   phoneRegex.test(this.orderDetails.phone);
+                nameRegex.test(this.orderDetails.firstName) &&
+                nameRegex.test(this.orderDetails.lastName) &&
+                phoneRegex.test(this.orderDetails.phone);
         }
     },
     methods: {
         async fetchData() {
-            const url = "http://localhost:3000/";  // match the port in server.js also 
+            const url = BASE_URL + "/lessons";  // match the port in server.js also 
             let response = await (fetch(url));
             this.products = await response.json();
         },

@@ -46,7 +46,8 @@
 
             <div v-for="product in sortedProducts" :key="product.id">
                 <figure>
-                    <img v-if="product.image" :src="product.image" :alt="product.title" width="200">
+                    <img :src="baseUrl + '/images/' + product.image" :alt="product.title" width="300"
+                        style="border-radius: 10%;">
                 </figure>
                 <i :class="product.icon"></i>
                 <h2 v-text="product.title"></h2>
@@ -111,7 +112,6 @@
 
     </div>
 
-    <script src="products.js"></script>
     <script src="app.js"></script>
 
 </body>
