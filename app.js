@@ -70,6 +70,34 @@ const myClub = createApp({
             let response = await (fetch(url));
             this.products = await response.json();
         },
+        async postOrder() {
+            const order = {
+                name: this.fullName,
+                phone: this.orderDetails.phone,
+                lessonID: this.cart,
+                spaces: this.cart.length
+            };
+            const url = BASE_URL + "/orders";
+            const options = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(order)
+            };
+            let response = await (fetch(url, options));
+        },
+
+        async submitCheckout() {
+            await this.postOrder();
+            alert("Order submitted successfully!");
+            this.cart = [];
+            this.orderDetails.firstName = '';
+            this.orderDetails.lastName = '';
+            this.orderDetails.phone = '';
+            this.orderDetails.email = '';
+            this.orderDetails.address = '';
+            this.showProduct = true;
+        },
+
         addToCart(product) {
             if (this.canAddToCart(product)) {
                 this.cart.push(product.id);  // push just the id number, not the whole object(made that mistake once lol)
@@ -102,16 +130,6 @@ const myClub = createApp({
                 this.cart.splice(index, 1);
                 product.availableInventory++;
             }
-        },
-        submitCheckout() {
-            alert("Order submitted successfully!");
-            this.cart = [];
-            this.orderDetails.firstName = '';
-            this.orderDetails.lastName = '';
-            this.orderDetails.phone = '';
-            this.orderDetails.email = '';
-            this.orderDetails.address = '';
-            this.showProduct = true;
         }
     }
 });
